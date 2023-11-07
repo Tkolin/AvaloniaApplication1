@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -16,11 +17,20 @@ public partial class WindowReport : Window
     private List<RepairRequest> RepairRequestsList { get; set; }
     private List<Report> ReportsListData { get; set; }
     private List<Report> ReportsListViewa { get; set; }
+    private Client ClientAuth;
     public WindowReport()
     {
         InitializeComponent();
         DownloadDataGrid();
         UpdateComboBox();
+    }
+    public WindowReport(Client client)
+    {
+        InitializeComponent();
+        DownloadDataGrid();
+        UpdateComboBox();
+        ClientAuth = client;
+        SearchBox.IsEnabled = false;
     }
       public void DownloadDataGrid()
     {
@@ -37,7 +47,6 @@ public partial class WindowReport : Window
                                                            c.Costs.ToString().ToLower().Contains(SearchBox.Text.ToLower()) ||
                                                            c.FailureReason.ToString().ToLower().Contains(SearchBox.Text.ToLower()) ||
                                                            c.AssistanceProvided.ToString().ToLower().Contains(SearchBox.Text)).ToList();
-        
         DataGrid.ItemsSource = ReportsListViewa;
         
     }
@@ -87,12 +96,59 @@ public partial class WindowReport : Window
         }
         
         
-        // if(DataGrid.SelectedItem == null) 
-            //TODO: Добавление с формы
-        //else
-            //TODO: Обновление с формы
 
-            DownloadDataGrid();
+        if (DataGrid.SelectedItem == null)
+        {
+            DataBaseManager.AddReports(new Report(
+                0, 
+                Convert.ToInt32(NUpDownTimeSpent.Value), 
+                    Convert.ToInt32(TBoxCost.Text), 
+                TBoxFailureReason.Text,
+                TBoxAssistanceProvided.Text,
+                ((RepairRequest)CBoxRequest.SelectedItem).ID
+            ));
+        }
+        else
+        {
+            DataBaseManager.UpdateReport(new Report(
+                ((Report)DataGrid.SelectedItem).ID,
+                Convert.ToInt32(NUpDownTimeSpent.Value), 
+                Convert.ToInt32(TBoxCost.Text), 
+                TBoxFailureReason.Text,
+                TBoxAssistanceProvided.Text,
+                ((RepairRequest)CBoxRequest.SelectedItem).ID
+            ));
+        }
+        DownloadDataGrid();
     }
-  
+
+    private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (DataGrid.SelectedItem == null)
+        {
+            NUpDownTimeSpent.IsEnabled = true;
+            TBoxCost.IsEnabled = true;
+            TBoxFailureReason.IsEnabled = true;
+            
+            NUpDownTimeSpent.Value = 0;
+            TBoxCost.Text = "";
+            TBoxFailureReason.Text = "";
+            TBoxAssistanceProvided.Text = "";
+            CBoxRequest.SelectedItem = null;
+        }
+        else
+        {
+            Report report = DataGrid.SelectedItem as Report;
+            
+            NUpDownTimeSpent.IsEnabled = false;
+            TBoxCost.IsEnabled = false;
+            TBoxFailureReason.IsEnabled = false;
+            
+            NUpDownTimeSpent.Value = report.TimeSpent;
+            TBoxCost.Text = report.Costs.ToString();
+            TBoxFailureReason.Text = report.FailureReason;
+            TBoxAssistanceProvided.Text = report.AssistanceProvided;
+            CBoxRequest.SelectedItem = RepairRequestsList.Where(w => w.ID == report.RequestID).First() as RepairRequest;
+        }
+    }
 }

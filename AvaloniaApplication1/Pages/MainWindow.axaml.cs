@@ -13,6 +13,7 @@ public partial class MainWindow : Window
 {
     private bool isClient = false;
     private Employee employeeAuth;
+    private Client clientAuth;
     public MainWindow()
     {
         InitializeComponent();
@@ -23,39 +24,79 @@ public partial class MainWindow : Window
 
     private void BtnAuth_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (TBoxLogin.Text.Length <= 1 || TBoxPassword.Text.Length <= 1)
+        if (isClient)
         {
-            MessageBoxManager.GetMessageBoxStandard("Ошибка", "Поля не заполнены",ButtonEnum.Ok).ShowAsync();;
-            return;
-        }
-
-        List<Employee> employees = DataBaseManager.GetEmployees();
-        if (employees.Count == 0)
-        {
-            
-            MessageBoxManager.GetMessageBoxStandard("Ошибка", "В базе нет сотрудников",ButtonEnum.Ok).ShowAsync();;
-            return;
-        }
-        for(int i = 0; i < employees.Count; i++)
-        {
-            if (employees[i].Login == (TBoxLogin.Text) &&
-                employees[i].Password == (TBoxPassword.Text))
+            if (TBoxPhoneNumber.Text.Length <= 8)
             {
-                employeeAuth = employees[i];
-                break;
+                MessageBoxManager.GetMessageBoxStandard("Ошибка", "Поля не заполнены",ButtonEnum.Ok).ShowAsync();;
+                return;
             }
-        }
+            List<Client> clients = DataBaseManager.GetClients();
+            if (clients.Count == 0)
+            {
+                MessageBoxManager.GetMessageBoxStandard("Ошибка", "В базе нет клиента",ButtonEnum.Ok).ShowAsync();;
+                return;
+            }
 
-        if (employeeAuth == null)
-        {
-            MessageBoxManager.GetMessageBoxStandard("Ошибка", "Данные не верны",ButtonEnum.Ok).ShowAsync();;
-            return;
+ 
+            for(int i = 0; i < clients.Count; i++)
+            {
+                if (clients[i].PhoneNumber == (TBoxPhoneNumber.Text))
+                {
+                    clientAuth = clients[i];
+                    break;
+                }
+            }
+
+            if (clientAuth == null)
+            {
+                MessageBoxManager.GetMessageBoxStandard("Ошибка", "Данные не верны",ButtonEnum.Ok).ShowAsync();;
+                return;
+            }
+            else
+            {
+                WindowReport wMeny = new WindowReport(clientAuth);
+                wMeny.ShowDialog(this);
+            }  
+            
         }
         else
         {
-            WindowMeny wMeny = new WindowMeny(employeeAuth);
-            wMeny.ShowDialog(this);
+            if (TBoxLogin.Text.Length <= 1 || TBoxPassword.Text.Length <= 1)
+            {
+                MessageBoxManager.GetMessageBoxStandard("Ошибка", "Поля не заполнены",ButtonEnum.Ok).ShowAsync();;
+                return;
+            }
+
+            List<Employee> employees = DataBaseManager.GetEmployees();
+            if (employees.Count == 0)
+            {
+            
+                MessageBoxManager.GetMessageBoxStandard("Ошибка", "В базе нет сотрудников",ButtonEnum.Ok).ShowAsync();;
+                return;
+            }
+            for(int i = 0; i < employees.Count; i++)
+            {
+                if (employees[i].Login == (TBoxLogin.Text) &&
+                    employees[i].Password == (TBoxPassword.Text))
+                {
+                    employeeAuth = employees[i];
+                    break;
+                }
+            }
+
+            if (employeeAuth == null)
+            {
+                MessageBoxManager.GetMessageBoxStandard("Ошибка", "Данные не верны",ButtonEnum.Ok).ShowAsync();;
+                return;
+            }
+            else
+            {
+                WindowMeny wMeny = new WindowMeny(employeeAuth);
+                wMeny.ShowDialog(this);
+            }  
         }
+        
     }
 
     private void BtnClose_OnClick(object? sender, RoutedEventArgs e)

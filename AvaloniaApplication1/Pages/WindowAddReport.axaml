@@ -25,7 +25,8 @@
                 
                           <TextBlock Text="Причина поломки"/>
                           <TextBox x:Name="TBoxFailureReason" />
-                
+                          <TextBlock Text="Проделаная работа"/>
+                          <TextBox x:Name="TBoxAssisment" />
                
                           <TextBlock Text="Номер заявки"/>
                           <ComboBox x:Name="CBoxRequest"/>

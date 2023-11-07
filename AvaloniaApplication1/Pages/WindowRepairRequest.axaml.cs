@@ -19,6 +19,7 @@ public partial class WindowRepairRequest : Window
 
     private List<EquipmentType> EquipmentTypesList { get; set; }
     private List<Client> ClientsList { get; set; }
+    private List<Employee> EmployeesList { get; set; }
 
     public WindowRepairRequest()
     {
@@ -53,12 +54,16 @@ public partial class WindowRepairRequest : Window
     {
         EquipmentTypesList = DataBaseManager.GetEquipmentTypes();
         ClientsList = DataBaseManager.GetClients();
+        EmployeesList = DataBaseManager.GetEmployees();
+        
 
         CBoxEquipmentTypeID.Items.Clear();
         CBoxClient.Items.Clear();
+        CBoxEmpoyee.Items.Clear();
 
         CBoxClient.ItemsSource = ClientsList;
         CBoxEquipmentTypeID.ItemsSource = EquipmentTypesList;
+        CBoxEmpoyee.ItemsSource = EmployeesList;
     }
 
     private void SearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)
@@ -132,7 +137,17 @@ public partial class WindowRepairRequest : Window
 
     private void BtnCreateExecution_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        if(DataGrid.SelectedItem == null)
+            return;
+        
+        DataBaseManager.AddExecutions(new Execution(
+            0, 
+            ((RepairRequest)DataGrid.SelectedItem).ID,
+            DateTime.Now,
+            DateTime.Now,
+            ((Employee)CBoxEmpoyee.SelectedItem).ID,
+            1));
+
     }
 
     private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)

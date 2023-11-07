@@ -133,7 +133,17 @@ public partial class WindowExecutionList : Window
 
     private void BtnFinalFixed_OnClick(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        if(DataGrid.SelectedItem == null)
+            return;
+        
+        Execution execution = DataGrid.SelectedItem as Execution;
+
+        execution.EndDate = DateTime.Now;
+        execution.StatusID = 3;
+        
+        DataBaseManager.UpdateExecution(execution);
+
+        DownloadDataGrid();
     }
 
 

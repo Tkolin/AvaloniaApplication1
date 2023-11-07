@@ -569,13 +569,13 @@ public static class DataBaseManager
             using (var comand = connection.CreateCommand())
             {
 
-                comand.CommandText = "UPDATE заявки_от_специалистов" +
-                                     "SET Содержание=@Содержание, ID_Статус=@ID_Статус, ID_Исполняемая_заявка=@ID_Исполняемая_заявка)" +
+                comand.CommandText = "UPDATE заявки_от_специалистов " +
+                                     "SET Содержание = @Содержание, ID_Статус = @ID_Статус, ID_Исполняемая_заявка = @ID_Исполняемая_заявка " +
                                      "WHERE id = @id;";
                 comand.Parameters.AddWithValue("@id", data.ID);
                 comand.Parameters.AddWithValue("@Содержание", data.Massage);
                 comand.Parameters.AddWithValue("@ID_Статус", data.StatusID);
-                comand.Parameters.AddWithValue("@ID_Исполняемая_заявка", data.ExecutionID.ToString("dd.MM.yyyy"));
+                comand.Parameters.AddWithValue("@ID_Исполняемая_заявка", data.ExecutionID);
 
                 
                 var rowsCount = comand.ExecuteNonQuery();

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -89,11 +91,49 @@ public partial class WindowApplicationList : Window
         }
         
         
-        // if(DataGrid.SelectedItem == null) 
-            //TODO: Добавление с формы
-        //else
-            //TODO: Обновление с формы
+        if (DataGrid.SelectedItem == null)
+        {
+            DataBaseManager.AddApplicationOfSpecialist(new ApplicationOfSpecialist(
+                0,     
+                TBoxMassage.Text,
+                ((Status)CBoxStatus.SelectedItem).ID, 
+                ((Execution)CBoxExecution.SelectedItem).ID
 
-            DownloadDataGrid();
+            ));
+        }
+  
+        else
+        {
+            DataBaseManager.UpdateApplicationOfSpecialist(new ApplicationOfSpecialist(
+                Convert.ToInt32(TBoxID.Text),
+                TBoxMassage.Text,
+                ((Status)CBoxStatus.SelectedItem).ID, 
+                ((Execution)CBoxExecution.SelectedItem).ID
+            ));
+        }
+
+        DownloadDataGrid();
+    }
+
+    private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (DataGrid.SelectedItem == null)
+        {
+            CBoxExecution.IsEnabled = true;
+            TBoxID.Text = "";
+            TBoxMassage.Text = "";
+            CBoxStatus.SelectedItem = null;
+            CBoxExecution.SelectedItem = null;
+
+        }
+        else
+        {
+            ApplicationOfSpecialist applicationOfSpecialist = DataGrid.SelectedItem as ApplicationOfSpecialist;
+            CBoxExecution.IsEnabled = false;
+            TBoxID.Text = applicationOfSpecialist.ID.ToString();
+            TBoxMassage.Text = applicationOfSpecialist.Massage;
+            CBoxStatus.SelectedItem = StatusList.Where(s => s.ID == applicationOfSpecialist.StatusID).First() as Status;
+            CBoxExecution.SelectedItem = ExecutionList.Where(s => s.ID == applicationOfSpecialist.ExecutionID).First() as Execution;
+        }
     }
 }

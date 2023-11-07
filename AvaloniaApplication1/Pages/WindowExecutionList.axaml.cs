@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Avalonia;
@@ -19,6 +20,7 @@ public partial class WindowExecutionList : Window
     private List<Execution> ExecutionsListView { get; set; }
     private List<Status> StatusList { get; set; }
     private List<RepairRequest> RepairRequestsList { get; set; }
+    
 
     private Employee user;
 
@@ -95,19 +97,37 @@ public partial class WindowExecutionList : Window
 
     private void BtnSavet_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (CBoxEmploye.SelectedItem == null || CBoxStatus.SelectedItem == null || CBoxRqiesrtID.SelectedItem == null)
+        if (CBoxEmploye.SelectedItem == null || CBoxStatus.SelectedItem == null)
         {
-            MessageBoxManager.GetMessageBoxStandard("Ошибка", "Данные не добавлены", ButtonEnum.Ok).ShowAsync();
+            MessageBoxManager.GetMessageBoxStandard("Ошибка", "Данные не заполнены", ButtonEnum.Ok).ShowAsync();
             return;
         }
-        
-        
-        // if(DataGrid.SelectedItem == null) 
-            //TODO: Добавление с формы
-        //else
-            //TODO: Обновление с формы
 
-            DownloadDataGrid();
+
+        if (DataGrid.SelectedItem == null)
+        {
+            DataBaseManager.AddExecutions(new Execution(
+                0, ((RepairRequest)CBoxRqiesrtID.SelectedItem).ID,
+                DPickerDateStart.SelectedDate.Value.Date, 
+                DPickerDateEnd.SelectedDate.Value.Date,
+                ((Employee)CBoxEmploye.SelectedItem).ID,
+                ((Status)CBoxStatus.SelectedItem).ID
+                ));
+        }
+  
+        else
+        {
+            DataBaseManager.UpdateExecution(new Execution(
+                ((Execution)DataGrid.SelectedItem).ID,
+                ((RepairRequest)CBoxRqiesrtID.SelectedItem).ID,
+                DPickerDateStart.SelectedDate.Value.Date, 
+                DPickerDateEnd.SelectedDate.Value.Date,
+                ((Employee)CBoxEmploye.SelectedItem).ID,
+                ((Status)CBoxStatus.SelectedItem).ID
+            ));
+        }
+
+        DownloadDataGrid();
     }
    
 
@@ -146,5 +166,39 @@ public partial class WindowExecutionList : Window
     private void BtnMovetToApplication_OnClick(object? sender, RoutedEventArgs e)
     {
         throw new System.NotImplementedException();
+    }
+    
+    private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (DataGrid.SelectedItem == null)
+        {
+            DPickerDateStart.IsEnabled = true;
+            CBoxRqiesrtID.SelectedItem = null;
+            CBoxStatus.SelectedItem = null;
+            CBoxEmploye.SelectedItem = null;
+            DPickerDateEnd.SelectedDate = DateTime.Now;
+            DPickerDateStart.SelectedDate = DateTime.Now;
+            TBoxDescRepair.Text =  null;
+        }
+        else
+        {
+            DPickerDateStart.IsEnabled = false;
+            Execution SelectedExecutionDG = DataGrid.SelectedItem as Execution;
+            CBoxRqiesrtID.SelectedItem = RepairRequestsList.Where(w => w.ID == SelectedExecutionDG.RequestID).FirstOrDefault();
+            CBoxStatus.SelectedItem = StatusList.Where(w => w.ID == SelectedExecutionDG.StatusID).FirstOrDefault();
+            CBoxEmploye.SelectedItem = EmployeesList.Where(w => w.ID == SelectedExecutionDG.RequestID).FirstOrDefault();
+            DPickerDateEnd.SelectedDate = SelectedExecutionDG.StartDate;
+            DPickerDateStart.SelectedDate = SelectedExecutionDG.EndDate;
+            var selectedRequest = RepairRequestsList.FirstOrDefault(w => w.ID == SelectedExecutionDG.RequestID);
+            if (selectedRequest != null)
+            {
+                TBoxDescRepair.Text = selectedRequest.ProblemDescription;
+            }
+        }
+
+
+        
+        
+
     }
 }

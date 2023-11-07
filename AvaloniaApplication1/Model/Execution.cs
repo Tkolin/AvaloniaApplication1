@@ -21,4 +21,9 @@ public class Execution
         ExecutorID = executorId;
         StatusID = status;
     }
+
+    public Execution()
+    {
+        
+    }
 }

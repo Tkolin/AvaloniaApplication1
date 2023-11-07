@@ -15,7 +15,7 @@
                            IsReadOnly="True"
                            GridLinesVisibility="All"
                            BorderThickness="2"
-                           Margin="0,20"
+                           Margin="0,20" SelectionChanged="DataGrid_OnSelectionChanged"
                            x:DataType="models:RepairRequest">
                  <DataGrid.Columns>
                      <DataGridTextColumn Width="*"  Header="Дата создания" Binding="{Binding CreatedDate}"/>
@@ -77,8 +77,16 @@
                <TextBox x:Name="TBoxProblemDescription"/>
                
                <TextBlock Text="Приоритет"/>
-               <NumericUpDown x:Name="NUpDownPriority"/>
+               <NumericUpDown x:Name="NUpDownPriority" Value="0" Increment="1" Minimum="0" Maximum="5"/>
                
+                <TextBlock Text="Клиент"/>
+                <ComboBox x:Name="CBoxClient" Width="200">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:Client">
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                <Button x:Name="BtnSavet" HorizontalAlignment="Center" Margin="5"
                        Click="BtnSavet_OnClick"
                        Content="Сохранить" />

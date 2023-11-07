@@ -64,7 +64,7 @@ public static class DataBaseManager
 
             using (var comand = connection.CreateCommand())
             {
-                comand.CommandText = "SELECT * FROM клиент";
+                comand.CommandText = "SELECT * FROM клиенты";
 
                 using (var reader = comand.ExecuteReader())
                 {
@@ -359,10 +359,10 @@ public static class DataBaseManager
 
                 var rowsCount = comand.ExecuteNonQuery();
 
-                if (rowsCount == 0)
-                {
-                    MessageBoxManager.GetMessageBoxStandard("Ошибка", "Данные не добавлены",ButtonEnum.Ok).ShowAsync();;
-                }
+               // if (rowsCount == 0)
+               // {
+               //     MessageBoxManager.GetMessageBoxStandard("Ошибка", "Данные не добавлены",ButtonEnum.Ok).ShowAsync();;
+               // }
             }
             connection.Close();
         }
@@ -377,13 +377,15 @@ public static class DataBaseManager
             using (var comand = connection.CreateCommand())
             {
                 comand.CommandText = "INSERT INTO заявки_на_ремонт " +
-                                     "(ID_Тип_оборудования, Серийный_номер, Описание_проблемы, Дата_создания ) "+
-                                     "VALUES (@ID_Тип_оборудования, @Серийный_номер, @Описание_проблемы, @Дата_создания);";
+                                     "(ID_Тип_оборудования, Серийный_номер, Описание_проблемы, Дата_создания, Приоритет, ID_клиента) "+
+                                     "VALUES (@ID_Тип_оборудования, @Серийный_номер, @Описание_проблемы, @Дата_создания, @Приоритет, @ID_клиента);";
 
                 comand.Parameters.AddWithValue("@ID_Тип_оборудования", data.EquipmentTypeID);
                 comand.Parameters.AddWithValue("@Серийный_номер", data.SerialNumber);
                 comand.Parameters.AddWithValue("@Описание_проблемы", data.ProblemDescription);
                 comand.Parameters.AddWithValue("@Дата_создания", data.CreatedDate.ToString("dd.MM.yyyy"));
+                comand.Parameters.AddWithValue("@Приоритет", data.Priority);
+                comand.Parameters.AddWithValue("@ID_клиента", data.ClientID);
 
                 var rowsCount = comand.ExecuteNonQuery();
 
@@ -570,7 +572,7 @@ public static class DataBaseManager
                 comand.CommandText = "UPDATE заявки_от_специалистов" +
                                      "SET Содержание=@Содержание, ID_Статус=@ID_Статус, ID_Исполняемая_заявка=@ID_Исполняемая_заявка)" +
                                      "WHERE id = @id;";
-
+                comand.Parameters.AddWithValue("@id", data.ID);
                 comand.Parameters.AddWithValue("@Содержание", data.Massage);
                 comand.Parameters.AddWithValue("@ID_Статус", data.StatusID);
                 comand.Parameters.AddWithValue("@ID_Исполняемая_заявка", data.ExecutionID.ToString("dd.MM.yyyy"));
@@ -622,15 +624,18 @@ public static class DataBaseManager
             using (var comand = connection.CreateCommand())
             {
 
-                comand.CommandText = "UPDATE исполнение_заявок" +
-                                     "SET  @ID_заявки = ID_заявки, @Дата_начала =  Дата_начала, @Дата_окончания =  Дата_окончания, @Исполнитель =  Исполнитель, @ID_Статус =  ID_Статус "+
-                                     "WHERE id = @id;";
+                comand.CommandText = "UPDATE исполнение_заявок " +
+                                     "SET  ID_заявки = @ID_заявки , Дата_начала = @Дата_начала, Дата_окончания = @Дата_окончания," +
+                                     "Исполнитель = @Исполнитель, ID_Статус = @ID_Статус "+
+                                     "WHERE ID = @id;";
 
+                comand.Parameters.AddWithValue("@id", data.ID);
                 comand.Parameters.AddWithValue("@ID_заявки", data.RequestID);
-                comand.Parameters.AddWithValue("@Дата_начала", data.StartDate.ToString("dd.MM.yyyy"));
-                comand.Parameters.AddWithValue("@Дата_окончания", data.EndDate.ToString("dd.MM.yyyy"));
+                comand.Parameters.AddWithValue("@Дата_начала", data.StartDate);
+                comand.Parameters.AddWithValue("@Дата_окончания", data.EndDate);
                 comand.Parameters.AddWithValue("@Исполнитель", data.ExecutorID);
                 comand.Parameters.AddWithValue("@ID_Статус", data.StatusID);
+
                 
                 var rowsCount = comand.ExecuteNonQuery();
 
@@ -650,10 +655,14 @@ public static class DataBaseManager
         
             using (var comand = connection.CreateCommand())
             {
-                comand.CommandText = "UPDATE  заявки_на_ремонт " +
-                                     "SET @ID_Тип_оборудования = ID_Тип_оборудования,@Серийный_номер =  Серийный_номер,@Описание_проблемы =  Описание_проблемы,@Дата_создания =  Дата_создания "+
+                comand.CommandText = "UPDATE заявки_на_ремонт " +
+                                     "SET ID_Тип_оборудования = @ID_Тип_оборудования, " +
+                                     "Серийный_номер = @Серийный_номер, " +
+                                     "Описание_проблемы = @Описание_проблемы, " +
+                                     "Дата_создания = @Дата_создания " +
                                      "WHERE id = @id;";
 
+                comand.Parameters.AddWithValue("@id", data.ID);
                 comand.Parameters.AddWithValue("@ID_Тип_оборудования", data.EquipmentTypeID);
                 comand.Parameters.AddWithValue("@Серийный_номер", data.SerialNumber);
                 comand.Parameters.AddWithValue("@Описание_проблемы", data.ProblemDescription);
@@ -683,7 +692,7 @@ public static class DataBaseManager
                                      "Помощь_оказана = @Помощь_оказана, " +
                                      "ID_Заявки = @ID_Заявки " +
                                      "WHERE id = @id;";
-                
+                comand.Parameters.AddWithValue("@id", data.ID);
                 comand.Parameters.AddWithValue("@Затраченное_время", data.TimeSpent);
                 comand.Parameters.AddWithValue("@Затраты", data.Costs);
                 comand.Parameters.AddWithValue("@Причина_неисправности", data.FailureReason);

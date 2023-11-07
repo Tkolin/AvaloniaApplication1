@@ -14,7 +14,7 @@
                            IsReadOnly="True"
                            GridLinesVisibility="All"
                            BorderThickness="2"
-                           Margin="0,20"
+                           Margin="0,20" SelectionChanged="DataGrid_OnSelectionChanged"
                            x:DataType="models:Execution">
                  <DataGrid.Columns>
                      <DataGridTextColumn Width="*"  Header="Номер заявки" Binding="{Binding RequestID}"/>
@@ -61,18 +61,24 @@
                 <TextBlock Text="Редактирование" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                
                <TextBlock Text="Номер заявки"/>
-               <ComboBox x:Name="CBoxRqiesrtID" Width="200" IsEnabled="False"/>
+               <ComboBox x:Name="CBoxRqiesrtID" Width="200">
+                   <ComboBox.ItemTemplate>
+                       <DataTemplate x:DataType="models:RepairRequest">
+                           <TextBlock Text="{Binding ID}"/>
+                       </DataTemplate>
+                   </ComboBox.ItemTemplate>>
+               </ComboBox>
                 <TextBlock Text="Описание проблеммы"/>
-                <TextBlock x:Name="TBoxDescRepair" Width="200" IsEnabled="False"/>
+                <TextBox x:Name="TBoxDescRepair" Width="200" IsEnabled="False"/>
                 
                 
                <TextBlock Text="Дата начала работы"/>
                <DatePicker x:Name="DPickerDateStart" IsEnabled="False"/>
                 <TextBlock Text="Дата окончания работы" IsEnabled="False"/>
-                <DatePicker x:Name="DPickerDateEnd"/>
+                <DatePicker x:Name="DPickerDateEnd" />
                 
                <TextBlock Text="Специалист "/>
-               <ComboBox x:Name="CBoxEmploye">
+               <ComboBox x:Name="CBoxEmploye" Width="200">
                    <ComboBox.ItemTemplate>
                        <DataTemplate x:DataType="models:Employee">
                            <TextBlock Text="{Binding Name}"/>
@@ -81,7 +87,7 @@
                </ComboBox>
                 
                <TextBlock Text="Статус"/>
-                <ComboBox x:Name="CBoxStatus">
+                <ComboBox x:Name="CBoxStatus" Width="200">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="models:Status">
                             <TextBlock Text="{Binding Name}"/>

@@ -1,0 +1,116 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:AvaloniaApplication1.Model"
+        mc:Ignorable="d" 
+        MinHeight="600" MinWidth = "1200"  MaxHeight="600" MaxWidth = "1200" 
+        x:Class="AvaloniaApplication1.Pages.WindowExecutionList"
+        Title="WindowExecutionList">
+     <Grid ShowGridLines="True" ColumnDefinitions="1*,1*">
+
+         <DataGrid Grid.Column="0"  x:Name="DataGrid"
+                           AutoGenerateColumns="False"
+                           IsReadOnly="True"
+                           GridLinesVisibility="All"
+                           BorderThickness="2"
+                           Margin="0,20"
+                           x:DataType="models:Execution">
+                 <DataGrid.Columns>
+                     <DataGridTextColumn Width="*"  Header="Номер заявки" Binding="{Binding RequestID}"/>
+                     <DataGridTextColumn Width="*"  Header="Дата начала" Binding="{Binding StartDate}"/>
+                     <DataGridTextColumn Width="*" Header="Дата окончания" Binding="{Binding EndDate}"/>
+                     <DataGridTextColumn Width="*" Header="Специалист" Binding="{Binding ExecutorID}"/>
+                     <DataGridTextColumn Width="*" Header="Статус" Binding="{Binding StatusID}"/>
+                 </DataGrid.Columns>
+             </DataGrid>
+        
+        <Grid Grid.Column="1" ShowGridLines="True" ColumnDefinitions="3*,2*" RowDefinitions="1*,2*">
+
+            <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment = "Center" Margin="5">
+
+                     
+            
+                <TextBlock Text="Действия:" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <Button x:Name="BtnDelet" Margin="5"
+                        Click="BtnDelet_OnClick" Width="200" HorizontalContentAlignment="Center"
+                        Content="Удалить"/>
+                <Button x:Name="BtnMovetToApplication"
+                        Click="BtnMovetToApplication_OnClick" Width="200" HorizontalContentAlignment="Center"
+                        Content="Перейти к задачам" Margin="5"/>
+                <Button x:Name="BtnRemoveSelect"
+                        Click="BtnRemoveSelect_OnClick" Width="200" HorizontalContentAlignment="Center"
+                        Content="Отменить выделение" Margin="5"/>
+
+               
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment = "Center" Margin="5">
+                              
+                <TextBlock Text="Поиск:" Margin="0,0,0,10"  HorizontalAlignment="Center"/>
+             
+                <TextBox x:Name="SearchBox" 
+                         TextChanged="SearchBox_OnTextChanged"  Text=""
+                         Margin="5"
+                         Width="150"/>
+                <Button x:Name="ResetBtn"
+                        Click="ResetBtn_OnClick"
+                        Content="Отчистить" HorizontalAlignment="Center"/>
+               
+            </StackPanel>
+            <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment = "Center"  Margin="2">
+                <TextBlock Text="Редактирование" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+               
+               <TextBlock Text="Номер заявки"/>
+               <ComboBox x:Name="CBoxRqiesrtID" Width="200" IsEnabled="False"/>
+                <TextBlock Text="Описание проблеммы"/>
+                <TextBlock x:Name="TBoxDescRepair" Width="200" IsEnabled="False"/>
+                
+                
+               <TextBlock Text="Дата начала работы"/>
+               <DatePicker x:Name="DPickerDateStart" IsEnabled="False"/>
+                <TextBlock Text="Дата окончания работы" IsEnabled="False"/>
+                <DatePicker x:Name="DPickerDateEnd"/>
+                
+               <TextBlock Text="Специалист "/>
+               <ComboBox x:Name="CBoxEmploye">
+                   <ComboBox.ItemTemplate>
+                       <DataTemplate x:DataType="models:Employee">
+                           <TextBlock Text="{Binding Name}"/>
+                       </DataTemplate>
+                   </ComboBox.ItemTemplate>>
+               </ComboBox>
+                
+               <TextBlock Text="Статус"/>
+                <ComboBox x:Name="CBoxStatus">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:Status">
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+               <Button x:Name="BtnSavet" HorizontalAlignment="Center" Margin="5"
+                       Click="BtnSavet_OnClick"
+                       Content="Сохранить" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment = "Center"  Margin="5">
+                <TextBlock Text="Управление" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                
+                
+                <Button x:Name="BtnFinalFixed" HorizontalAlignment="Center" Margin="5"
+                        Click="BtnFinalFixed_OnClick" Width="200" HorizontalContentAlignment="Center"
+                        Content="Отметить как выполненое" />
+
+                <Button x:Name="BtnCreateReport" HorizontalAlignment="Center" Margin="5,5,5,50"
+                        Click="BtnCreateReport_OnClick" Width="200" HorizontalContentAlignment="Center"
+                        Content="Создать отчёт" />   
+                
+
+                <TextBox x:Name="TBoxApplication" Watermark="Введите текст задачи..."/>
+                <Button x:Name="BtnCreateApplication" HorizontalAlignment="Center" Margin="5,5,5,5"
+                        Click="BtnCreateApplication_OnClick" Width="150" HorizontalContentAlignment="Center"
+                        Content="Создать задачу" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

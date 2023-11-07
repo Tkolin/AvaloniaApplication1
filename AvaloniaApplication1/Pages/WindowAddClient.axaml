@@ -1,0 +1,33 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" 
+        MinHeight="600" MinWidth = "600"  MaxHeight="600" MaxWidth = "600" 
+        x:Class="AvaloniaApplication1.Pages.WindowAddClient"
+        Title="WindowsAddClient">
+     <Grid Margin="5">
+                <StackPanel 
+                        Orientation="Vertical" VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                        <TextBlock 
+                                Margin="20"  HorizontalAlignment="Center"
+                                Text="Добавление клиента"
+                                FontSize="30"/>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" Width="200"  x:Name="PanelEmployee">
+                                <TextBlock>Имя</TextBlock>
+                                <TextBox x:Name="TBoxName"/>
+                                <TextBlock>Номер телефона</TextBlock>
+                                <TextBox x:Name="TBoxPhoneNumber"/>
+                        </StackPanel>
+                        <Button x:Name="BtnAdd" Margin="4" Width="200" HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                                Content="Добавить"
+                                Click="BtnAdd_OnClick"/>
+                        <Button x:Name="BtnBack" Margin="4" Width="200" HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                                Content="Отмена"
+                                Click="BtnBack_OnClick"/>
+
+                        </StackPanel>
+        </Grid>
+</Window>

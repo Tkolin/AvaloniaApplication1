@@ -1,0 +1,30 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" 
+        MinHeight="600" MinWidth = "600"  MaxHeight="600" MaxWidth = "600" 
+        x:Class="AvaloniaApplication1.Pages.WindowMeny"
+        Title="WindowMeny">
+                  <StackPanel 
+                        Orientation="Vertical" VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                        <TextBlock 
+                                Margin="20"  HorizontalAlignment="Center"
+                                Text="МЕНЮ"
+                                FontSize="30"/>
+
+                        <Button x:Name="BtnRepairRequest" Margin="4" Width="200" HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                                Content="Заявки на ремонт"
+                                Click="BtnRepairRequest_OnClick"/>
+                        <Button x:Name="BtnExecution" Margin="4" Width="200" HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                                Content="Заявки в работе"
+                                Click="BtnExecution_OnClick"/>
+                        <Button x:Name="BtnApplicationOfSpec" Margin="4" Width="200" HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                                Content="Запросы специалистов"
+                                Click="BtnApplicationOfSpec_OnClick"/>
+                        <Button x:Name="BtnReports" Margin="4" Width="200" HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                                Content="Отчёты"
+                                Click="BtnReports_OnClick"/>
+                </StackPanel>
+</Window>

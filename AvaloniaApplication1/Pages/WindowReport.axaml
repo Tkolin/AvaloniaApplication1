@@ -1,0 +1,88 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:AvaloniaApplication1.Model"
+        mc:Ignorable="d" 
+        MinHeight="600" MinWidth = "1200"  MaxHeight="600" MaxWidth = "1200" 
+        x:Class="AvaloniaApplication1.Pages.WindowReport"
+        Title="WindowReport">
+          <Grid ShowGridLines="True" ColumnDefinitions="1*,1*">
+
+         <DataGrid Grid.Column="0"  x:Name="DataGrid"
+                           AutoGenerateColumns="False"
+                           IsReadOnly="True"
+                           GridLinesVisibility="All"
+                           BorderThickness="2"
+                           Margin="0,20"
+                           x:DataType="models:Report">
+                 <DataGrid.Columns>
+                     <DataGridTextColumn Width="*"  Header="Затраченое время (часы)" Binding="{Binding TimeSpent}"/>
+                     <DataGridTextColumn Width="*"  Header="Стоимость работ" Binding="{Binding Costs}"/>
+                     <DataGridTextColumn Width="*" Header="Причина поломки" Binding="{Binding FailureReason}"/>
+                     <DataGridTextColumn Width="*" Header="Помощь оказана" Binding="{Binding AssistanceProvided}"/>
+                     <DataGridTextColumn Width="*" Header="Номер заявки" Binding="{Binding RequestID}"/>
+            </DataGrid.Columns>
+             </DataGrid>
+                       
+
+        <Grid Grid.Column="1" ShowGridLines="True" ColumnDefinitions="3*,2*" RowDefinitions="1*,2*">
+
+            <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment = "Center" Margin="5">
+
+                     
+            
+                <TextBlock Text="Действия:" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <Button x:Name="BtnDelet" Margin="5"
+                        Click="BtnDelet_OnClick" Width="200" HorizontalContentAlignment="Center"
+                        Content="Удалить"/>
+                <Button x:Name="BtnRemoveSelect"
+                        Click="BtnRemoveSelect_OnClick" Width="200" HorizontalContentAlignment="Center"
+                        Content="Отменить выделение" Margin="5"/>
+
+               
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment = "Center" Margin="5">
+                              
+                <TextBlock Text="Поиск:" Margin="0,0,0,10"  HorizontalAlignment="Center"/>
+             
+                <TextBox x:Name="SearchBox" 
+                         TextChanged="SearchBox_OnTextChanged" Text="" 
+                         Margin="5"
+                         Width="150"/>
+                <Button x:Name="ResetBtn"
+                        Click="ResetBtn_OnClick"
+                        Content="Отчистить" HorizontalAlignment="Center"/>
+               
+            </StackPanel>
+            <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment = "Center"  Margin="2">
+                <TextBlock Text="Редактирование" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+               
+               <TextBlock Text="Затраченое время (часы)"/>
+               <NumericUpDown x:Name="NUpDownTimeSpent" Width="200" IsEnabled="False"/>
+                <TextBlock Text="Стоимость работ"/>
+                <TextBox x:Name="TBoxCost" Width="200" IsEnabled="False"/>
+                
+                
+               <TextBlock Text="Причина поломки"/>
+               <TextBox x:Name="TBoxFailureReason" IsEnabled="False"/>
+                <TextBlock Text="Помощь оказана"/>
+                <TextBox x:Name="TBoxAssistanceProvided"/>
+
+               
+               <TextBlock Text="Номер заявки"/>
+               <ComboBox x:Name="CBoxRequest">
+                   <ComboBox.ItemTemplate>
+                       <DataTemplate x:DataType="models:RepairRequest">
+                           <TextBlock Text="{Binding ID}"/>
+                       </DataTemplate>
+                   </ComboBox.ItemTemplate>
+               </ComboBox>
+               
+               <Button x:Name="BtnSavet" HorizontalAlignment="Center" Margin="5"
+                       Click="BtnSavet_OnClick"
+                       Content="Сохранить" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
